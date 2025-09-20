@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Petite Lenormand Reading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #fdfaf6;
+            color: #333;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-[#fdfaf6] flex items-center justify-center min-h-screen p-4">
+    <div class="max-w-4xl w-full text-center p-6 md:p-10 bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200">
+        <header class="mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Your Daily Lenormand Reading</h1>
+            <p class="text-lg text-gray-600 mt-2">A pair of cards for today's guidance.</p>
+        </header>
+
+        <main id="card-display" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
+            <!-- Card 1 -->
+            <div id="card-1-container" class="flex flex-col items-center transition-opacity duration-500">
+                <img id="card-1-image" src="" alt="First Lenormand Card" class="w-48 h-auto rounded-xl card-shadow mb-4">
+                <h2 id="card-1-name" class="text-2xl font-bold text-rose-900 mb-2"></h2>
+                <p id="card-1-meaning" class="text-gray-700 leading-relaxed"></p>
+            </div>
+
+            <!-- Card 2 -->
+            <div id="card-2-container" class="flex flex-col items-center transition-opacity duration-500">
+                <img id="card-2-image" src="" alt="Second Lenormand Card" class="w-48 h-auto rounded-xl card-shadow mb-4">
+                <h2 id="card-2-name" class="text-2xl font-bold text-rose-900 mb-2"></h2>
+                <p id="card-2-meaning" class="text-gray-700 leading-relaxed"></p>
+            </div>
+        </main>
+        
+        <footer class="mt-10">
+            <button id="new-cards-button" class="bg-rose-800 text-white font-bold py-3 px-8 rounded-lg hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-opacity-50 transition-all duration-300 shadow-lg">
+                Draw Two New Cards
+            </button>
+        </footer>
+    </div>
+
+    <script>
+        const lenormandDeck = [
+            { number: 1, name: "Rider", meaning: "News, messages, a visitor, speed, something new arriving.", img: 'card1.png' },
+            { number: 2, name: "Clover", meaning: "Luck, small happiness, opportunities, a pleasant surprise.", img: 'card2.png' },
+            { number: 3, name: "Ship", meaning: "Travel, distance, departure, foreign matters, transition.", img: 'card3.png' },
+            { number: 4, name: "House", meaning: "Home, family, stability, security, comfort, establishment.", img: 'card4.png' },
+            { number: 5, name: "Tree", meaning: "Health, growth, patience, past connections, spirituality.", img: 'card5.png' },
+            { number: 6, name: "Clouds", meaning: "Confusion, uncertainty, doubt, lack of clarity, problems.", img: 'card6.png' },
+            { number: 7, name: "Snake", meaning: "Deception, betrayal, complications, hidden dangers, a rival.", img: 'card7.png' },
+            { number: 8, name: "Coffin", meaning: "Endings, illness, transformation, letting go, a final conclusion.", img: 'card8.png' },
+            { number: 9, name: "Bouquet", meaning: "A gift, happiness, appreciation, beauty, a pleasant surprise.", img: 'card9.png' },
+            { number: 10, name: "Scythe", meaning: "Sudden decisions, endings, danger, a sharp cut, harvest.", img: 'card10.png' },
+            { number: 11, name: "Whip", meaning: "Conflict, arguments, repetitive actions, physical activity, passion.", img: 'card11.png' },
+            { number: 12, name: "Birds", meaning: "Communication, gossip, excitement, nervousness, conversations.", img: 'card12.png' },
+            { number: 13, name: "Child", meaning: "A new start, a child, smallness, innocence, immaturity.", img: 'card13.png' },
+            { number: 14, name: "Fox", meaning: "Cunning, suspicion, a job, cleverness, resourcefulness.", img: 'card14.png' },
+            { number: 15, name: "Bear", meaning: "Power, strength, authority, finances, a protective figure.", img: 'card15.png' },
+            { number: 16, name: "Stars", meaning: "Hope, guidance, inspiration, dreams, destiny, clarity.", img: 'card16.png' },
+            { number: 17, name: "Stork", meaning: "Change, movement, relocation, a new phase, personal growth.", img: 'card17.png' },
+            { number: 18, name: "Dog", meaning: "Friendship, loyalty, trust, support, a reliable person.", img: 'card18.png' },
+            { number: 19, name: "Tower", meaning: "Authority, isolation, institutions, corporations, boundaries.", img: 'card19.png' },
+            { number: 20, name: "Garden", meaning: "Public events, society, meetings, community, social networks.", img: 'card20.png' },
+            { number: 21, name: "Mountain", meaning: "Obstacles, delays, challenges, blockages, a long journey.", img: 'card21.png' },
+            { number: 22, name: "Crossroads", meaning: "Choices, decisions, alternatives, multiple paths, opportunities.", img: 'card22.png' },
+            { number: 23, name: "Mice", meaning: "Loss, theft, stress, anxiety, gradual decay, worries.", img: 'card23.png' },
+            { number: 24, name: "Heart", meaning: "Love, romance, passion, happiness, caring, relationships.", img: 'card24.png' },
+            { number: 25, name: "Ring", meaning: "Commitment, partnership, contracts, marriage, cycles.", img: 'card25.png' },
+            { number: 26, name: "Book", meaning: "Secrets, knowledge, education, hidden information, research.", img: 'card26.png' },
+            { number: 27, name: "Letter", meaning: "Documents, news, communication, information, mail.", img: 'card27.png' },
+            { number: 28, name: "Man", meaning: "A male person, the querent if male, masculine energy.", img: 'card28.png' },
+            { number: 29, name: "Woman", meaning: "A female person, the querent if female, feminine energy.", img: 'card29.png' },
+            { number: 30, name: "Lily", meaning: "Peace, maturity, sensuality, wisdom, contentment, family.", img: 'card30.png' },
+            { number: 31, name: "Sun", meaning: "Success, happiness, energy, optimism, victory, vitality.", img: 'card31.png' },
+            { number: 32, name: "Moon", meaning: "Intuition, emotions, romance, creativity, recognition.", img: 'card32.png' },
+            { number: 33, name: "Key", meaning: "Solutions, answers, success, destiny, unlocking secrets.", img: 'card33.png' },
+            { number: 34, name: "Fish", meaning: "Finances, business, abundance, flow of money, independence.", img: 'card34.png' },
+            { number: 35, name: "Anchor", meaning: "Stability, security, long-term goals, perseverance, reaching a safe harbor.", img: 'card35.png' },
+            { number: 36, name: "Cross", meaning: "Burdens, suffering, fate, sadness, a difficult challenge to endure.", img: 'card36.png' },
+        ];
+
+        const card1Image = document.getElementById('card-1-image');
+        const card1Name = document.getElementById('card-1-name');
+        const card1Meaning = document.getElementById('card-1-meaning');
+        
+        const card2Image = document.getElementById('card-2-image');
+        const card2Name = document.getElementById('card-2-name');
+        const card2Meaning = document.getElementById('card-2-meaning');
+
+        const newCardsButton = document.getElementById('new-cards-button');
+        const card1Container = document.getElementById('card-1-container');
+        const card2Container = document.getElementById('card-2-container');
+
+        function drawCards(seed) {
+            let index1, index2;
+
+            if (seed) {
+                let seededRandom1 = Math.sin(seed) * 10000;
+                seededRandom1 = seededRandom1 - Math.floor(seededRandom1);
+                index1 = Math.floor(seededRandom1 * lenormandDeck.length);
+                
+                let seededRandom2 = Math.sin(seed + 1) * 10000;
+                seededRandom2 = seededRandom2 - Math.floor(seededRandom2);
+                index2 = Math.floor(seededRandom2 * lenormandDeck.length);
+
+                if (index1 === index2) {
+                    index2 = (index2 + 1) % lenormandDeck.length;
+                }
+            } else {
+                index1 = Math.floor(Math.random() * lenormandDeck.length);
+                do {
+                    index2 = Math.floor(Math.random() * lenormandDeck.length);
+                } while (index1 === index2);
+            }
+            
+            const card1 = lenormandDeck[index1];
+            const card2 = lenormandDeck[index2];
+            const baseUrl = 'cards/'; // relative folder path
+
+            // Update Card 1
+            card1Image.src = `${baseUrl}${card1.img}`;
+            card1Image.alt = card1.name;
+            card1Name.textContent = `${card1.number}. ${card1.name}`;
+            card1Meaning.textContent = card1.meaning;
+
+            // Update Card 2
+            card2Image.src = `${baseUrl}${card2.img}`;
+            card2Image.alt = card2.name;
+            card2Name.textContent = `${card2.number}. ${card2.name}`;
+            card2Meaning.textContent = card2.meaning;
+        }
+
+        // On page load -> draw today's cards
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+            drawCards(seed);
+        });
+
+        // On button click -> new random cards
+        newCardsButton.addEventListener('click', () => {
+            card1Container.style.opacity = 0;
+            card2Container.style.opacity = 0;
+
+            setTimeout(() => {
+                drawCards(); // random draw
+                card1Container.style.opacity = 1;
+                card2Container.style.opacity = 1;
+            }, 500);
+        });
+    </script>
+</body>
+</html>
+
